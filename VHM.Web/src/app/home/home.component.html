@@ -1,0 +1,19 @@
+
+
+<table>
+    <thead>
+	<tr>
+	    <th>Nombre</th>
+	    <th>Tipo</th>
+	    <th>Proveedor</th>
+	    <th>Actions</th>
+	</tr>
+    </thead>
+    <tbody>
+	<tr *ngFor='let product of products'>
+	    <td>{{product.Name}}</td>
+	    <td>{{product.Type}}</td>
+	    <td>{{product.Provider}}</td>
+	</tr>
+    </tbody>
+</table>
