@@ -1,6 +1,6 @@
 using Core.Data.UnitOfWork;
 
-namespace Persistence;
+namespace Repositories;
 public interface IUnityOfWorkContext : IUnitOfWork
 {
 }
