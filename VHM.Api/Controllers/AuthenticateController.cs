@@ -68,6 +68,7 @@ public class AuthenticateController : ControllerBase
         return Unauthorized();
     }
 
+#region probar este metodo
     //[HttpPost]
     //[Route("register")]
     //public async Task<IActionResult> Register(RegisterModel model)
@@ -76,17 +77,8 @@ public class AuthenticateController : ControllerBase
     //    if (userExists != null)
     //        return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "El usuario ya existe." });
 
-    //    IdentityUser user =  new RegisterModel()
+    //    var user =  new RegisterModel()
     //    {
-    //        SecurityStamp = Guid.NewGuid().ToString(),
-    //        UserName = model.UserName,
-    //        PhoneNumber = model.Celular,
-    //        Celular = model.Celular,
-    //        Cedula = model.Cedula,
-    //        MiembroId = model.MiembroId,  
-    //        CargoId = model.CargoId,
-    //        Nombres = model.Nombres,
-    //        Apellidos = model.Apellidos
     //    };
     //    
     //    var result = await _userManager.CreateAsync(user, $"Pde@{model.Cedula}");
@@ -95,6 +87,7 @@ public class AuthenticateController : ControllerBase
 
     //    return Ok(new Response { Status = "Success", Message = "Usuario creado correctamente." });
     //}
+#endregion
 
     private JwtSecurityToken GetToken(List<Claim> authClaims)
     {
