@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Models.Entities;
+using Core.Base;
 
 #nullable disable
 
@@ -67,6 +68,8 @@ namespace Persistence
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
+
+                entity.Property<bool>("IsDeleted");
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -91,6 +94,8 @@ namespace Persistence
                     .HasForeignKey(d => d.TypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Products__TypeId__2F10007B");
+
+                entity.Property<bool>("IsDeleted");
             });
 
             modelBuilder.Entity<ProductsType>(entity =>
@@ -101,6 +106,8 @@ namespace Persistence
                     .IsRequired()
                     .HasMaxLength(25)
                     .IsUnicode(false);
+
+                entity.Property<bool>("IsDeleted");
             });
 
             modelBuilder.Entity<Provider>(entity =>
@@ -116,11 +123,48 @@ namespace Persistence
                     .HasMaxLength(11)
                     .IsUnicode(false)
                     .HasColumnName("RNC");
+
+                entity.Property<bool>("IsDeleted");
             });
+
+	    modelBuilder.Entity<Empleado>().HasQueryFilter(p => EF.Property<bool>(p, "IsDeleted") == false);
+	    modelBuilder.Entity<Product>().HasQueryFilter(p => EF.Property<bool>(p, "IsDeleted") == false);
+	    modelBuilder.Entity<ProductsType>().HasQueryFilter(p => EF.Property<bool>(p, "IsDeleted") == false);
+	    modelBuilder.Entity<Provider>().HasQueryFilter(p => EF.Property<bool>(p, "IsDeleted") == false);
 
             OnModelCreatingPartial(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+        public override int SaveChanges()
+        {
+	    SoftDelete();
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
+        {
+	    SoftDelete();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+	private void SoftDelete()
+	{
+	    foreach(var entry in ChangeTracker.Entries())
+	    {
+		switch(entry.State)
+		{
+		    case EntityState.Added:
+			entry.CurrentValues["IsDeleted"] = false;
+			break;
+		    case EntityState.Deleted:
+			entry.State = EntityState.Modified;
+			entry.CurrentValues["IsDeleted"] = true;
+			break;
+		}
+	    }
+	}
+        
     }
 }

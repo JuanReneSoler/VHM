@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core.Base;
-using Core.Ef;
 
 #nullable disable
 
 namespace Models.Entities
 {
-    public partial class ProductsType : EntityBase, ISoftDelete
+    public partial class ProductsType : EntityBase
     {
         public ProductsType()
         {
@@ -15,7 +14,6 @@ namespace Models.Entities
         }
 
         public string Description { get; set; }
-        public bool IsDelete { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }
     }

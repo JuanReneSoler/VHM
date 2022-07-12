@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Core.Data.Repository;
+using Core.Base;
 
 namespace Core.Data.UnitOfWork
 {
@@ -28,6 +30,8 @@ namespace Core.Data.UnitOfWork
         public void Rollback()=>this._context.Database.BeginTransaction().Rollback();
 
         public async Task RollbackAsync()=> await this._context.Database.BeginTransaction().RollbackAsync();
+	
+	public IGenericRepository<T> GetRepository<T>() where T : EntityBase => new GenericRepository<T>(_context);
 
         #region Dispose
         private bool _disposed = false;

@@ -12,7 +12,7 @@ create table Empleado
     UserId varchar(255) not null,
     Birthday datetime2 not null,
     DocId varchar(11) unique,
-    IsDelete bit not null default 0,
+    IsDeleted bit not null default 0,
     FullName as Names + ' ' + Surnames
 )
 
@@ -22,14 +22,14 @@ create table Providers
     Nombre varchar(50),
     RNC varchar(11) not null,
     Description text null,
-    IsDelete bit not null default 0
+    IsDeleted bit not null default 0
 )
 
 create table ProductsType
 (
     Id int not null primary key identity(1, 1),
     Description varchar(25) not null,
-    IsDelete bit not null default 0
+    IsDeleted bit not null default 0
 )
 
 create table Products
@@ -40,7 +40,7 @@ create table Products
     ProveedorId int not null FOREIGN KEY REFERENCES Providers(Id),
     TypeId int not null foreign key references ProductsType(Id),
     Description text null,
-    IsDelete bit not null default 0
+    IsDeleted bit not null default 0
 )
 ------------------------------------------------------------------------------
 
