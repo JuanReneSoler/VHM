@@ -4,7 +4,8 @@
 
 export const environment = {
     production: false,
-    endPoins: "https://localhost:7002/api/"
+    endPoins: "https://localhost:7002/api/",
+    cookieName: "VHM"
 };
 
 /*

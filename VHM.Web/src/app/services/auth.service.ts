@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { User } from '../models/user';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +13,22 @@ export class AuthService {
 
     login(user:User)
     {
-	var result = this.http.post(environment.endPoins+"authenticate", user)
-	    .subscribe({
-		next(){
-		}
+	this.http.post(environment.endPoins+"authenticate", user)
+	    .subscribe((res)=>{
+		this.cookie.set(environment.cookieName, JSON.stringify(res));
 	    });
+    }
+
+    logout()
+    {
+	this.cookie.delete(environment.cookieName);
+    }
+
+    getHeader(){
+	if(!this.cookie.check(environment.cookieName)) return;
+	var _cookie = this.cookie.get(environment.cookieName);
+	var _obj = JSON.parse(_cookie);
+	return new HttpHeaders().set("Authorization", `Bearer ${_obj.token}`);
     }
 
 }
