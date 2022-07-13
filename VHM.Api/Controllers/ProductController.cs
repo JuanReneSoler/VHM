@@ -15,6 +15,9 @@ using System.Threading.Tasks;
 using Models.ViewModels;
 using Models.Entities;
 using Core.Data.Repository;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using Models.Dtos;
 
 namespace VHM.Api.Controllers;
 
@@ -25,37 +28,54 @@ public class ProductsController : ControllerBase
 {
     private readonly IGenericRepository<Product> _repository;
     private readonly IUnityOfWorkContext _uow;
-    public ProductsController(IUnityOfWorkContext uow)
+    private readonly IMapper _mapper;
+    public ProductsController(IUnityOfWorkContext uow, IMapper mapper)
     {
         _repository = uow.GetRepository<Product>();
-	_uow = uow;
+        _uow = uow;
+	_mapper = mapper;
     }
 
     [HttpGet]
-    public async Task<dynamic> GetAll() => (await _repository.GetAllAsync())
-	.Select(product => new { product.Id, product.Name, product.Proveedor.Nombre, product.Type.Description});
-    
+    [AllowAnonymous]
+    public async Task<dynamic> GetAll() =>
+           (await _repository.GetAllAsync(x => x.Include(y => y.Proveedor).Include(y => y.Type)))
+           .Select(product => new
+           {
+               Id= product.Id,
+               Name = product.Name,
+               Type = product.Type.Description,
+               Provider = product.Proveedor.Nombre,
+	       Price = product.PriceUnit,
+	       Description = product.Description
+           }).ToList();
+
     [HttpPost]
-    public async Task<IActionResult> Add(object model)
+    [AllowAnonymous]
+    public async Task<IActionResult> Add(ProductDto model)
     {
-	await _repository.AddAsync(models);
-	await _uow.CommitAsync();
-	return Ok();
+	var entity = _mapper.Map<Product>(model);
+        await _repository.AddAsync(entity);
+        await _uow.CommitAsync();
+        return Ok();
     }
 
     [HttpDelete]
+    [AllowAnonymous]
     public async Task<IActionResult> Delete(int Id)
     {
-	_repository.Delete(Id);
-	_uow.CommitAsync();
-	return Ok();
+        await _repository.DeleteAsync(Id);
+        await _uow.CommitAsync();
+        return Ok();
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update(object model)
+    [AllowAnonymous]
+    public async Task<IActionResult> Update(ProductDto model)
     {
-	await _repository.UpdateAsync(model);
-	_uow.CommitAsync();
-	return Ok();
+	var entity = _mapper.Map<Product>(model);
+        await _repository.UpdateAsync(entity);
+        _uow.CommitAsync();
+        return Ok();
     }
 }

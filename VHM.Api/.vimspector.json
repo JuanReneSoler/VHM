@@ -1,0 +1,20 @@
+ {
+   "configurations": {
+     "attach": {
+       "adapter": "netcoredbg",
+       "configuration": {
+         "request": "attach",
+         "processId": "${pid}"
+       }
+     },
+     "launch": {
+       "adapter": "netcoredbg",
+       "configuration": {
+         "request": "launch",
+         "program": "/home/juansoler/Workspace/VHM/VHM.Api/bin/Debug/net6.0/VHM.Api.dll",
+         "args": [],
+         "stopAtEntry": false
+       }
+     }
+   }
+ }

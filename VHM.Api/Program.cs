@@ -59,7 +59,7 @@ var mappingConfig = new MapperConfiguration( a =>{ a.AddProfile(new MappingProfi
 IMapper mapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
-builder.Services.AddSingleton<IUnityOfWorkContext, UnityOfWorkContext>();
+builder.Services.AddTransient<IUnityOfWorkContext, UnityOfWorkContext>();
 
 var app = builder.Build();
 

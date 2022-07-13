@@ -2,16 +2,18 @@ using System;
 using System.Linq.Expressions;
 using System.Collections.Generic;
 using Core.Base;
+using Microsoft.EntityFrameworkCore.Query;
+
 
 namespace Core.Data.Repository
 {
     public interface IBaseRepository<T>
         where T : EntityBase
     {
-        IEnumerable<T> GetAll();
-        IEnumerable<T> GetBy(Expression<Func<T, bool>> find);
+        IEnumerable<T> GetAll(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null);
+        IEnumerable<T> GetBy(Expression<Func<T, bool>> find, Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null);
         T Find(int Id);
-        T FindBy(Expression<Func<T, bool>> find);
+        T FindBy(Expression<Func<T, bool>> find, Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null);
         void Add(T Entity);
         void AddRange(IEnumerable<T> Entities);
         void Delete(int Id);

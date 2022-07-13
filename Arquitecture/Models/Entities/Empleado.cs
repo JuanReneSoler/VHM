@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Core.Base;
+﻿using Core.Base;
 
 #nullable disable
 

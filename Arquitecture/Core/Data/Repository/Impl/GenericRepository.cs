@@ -21,10 +21,25 @@ namespace Core.Data.Repository
             this._context = context;
         }
         #region IBaseRepository
-	public IEnumerable<T> GetAll() => EntityBase.ToList();
-        public IEnumerable<T> GetBy(Expression<Func<T, bool>> find) => EntityBase.Where(find).ToList();
+	public IEnumerable<T> GetAll(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
+	{
+	    var query = EntityBase.AsQueryable();
+	    if(includes != null) query = includes(query);
+	    return query.ToList();
+	}
+        public IEnumerable<T> GetBy(Expression<Func<T, bool>> find, Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
+	{
+	    var query = EntityBase.Where(find);
+	    if(includes != null) query = includes(query);
+	    return query.ToList();
+	}
         public T Find(int Id) => EntityBase.Where(x => x.Id == Id).Single();
-        public T FindBy(Expression<Func<T, bool>> find) => EntityBase.Where(find).Single();
+        public T FindBy(Expression<Func<T, bool>> find, Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
+	{
+	    var query = EntityBase.Where(find);
+	    if(includes != null) query = includes(query);
+	    return query.Single();
+	}
         public void Add(T Entity) => EntityBase.Add(Entity);
         public void AddRange(IEnumerable<T> Entities) => EntityBase.AddRange(Entities);
         public void Delete(int Id)
@@ -49,10 +64,10 @@ namespace Core.Data.Repository
         public int Count(Expression<Func<T, bool>> expression)=>EntityBase.Count(expression);
         #endregion
         #region IAsyncRepository
-        public async Task<IEnumerable<T>> GetAllAsync() => await Task.Run(()=> GetAll());
-        public async Task<IEnumerable<T>> GetByAsync(Expression<Func<T, bool>> find) => await Task.Run(()=> GetBy(find));
+        public async Task<IEnumerable<T>> GetAllAsync(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null) => await Task.Run(()=> GetAll(includes));
+        public async Task<IEnumerable<T>> GetByAsync(Expression<Func<T, bool>> find, Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null) => await Task.Run(()=> GetBy(find, includes));
         public async Task<T> FindAsync(int Id) => await Task.Run(()=> Find(Id));
-        public async Task<T> FindByAsync(Expression<Func<T, bool>> find) => await Task.Run(()=>FindBy(find));
+        public async Task<T> FindByAsync(Expression<Func<T, bool>> find, Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null) => await Task.Run(()=>FindBy(find, includes));
         public async Task AddAsync(T Entity) => await Task.Run(()=> Add(Entity));
         public async Task AddRangeAsync(IEnumerable<T> Entities) => await Task.Run(()=> AddRange(Entities));
         public async Task DeleteAsync(int Id) => await Task.Run(() => Delete(Id));
