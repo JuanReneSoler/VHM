@@ -10,10 +10,13 @@ export class HomeComponent implements OnInit {
 
     constructor(private prodService: ProductsService) { }
 
-    products:any;
+    products:any = [];
 
     ngOnInit(): void {
-	this.products = this.prodService.getAll();
+	this.prodService.getAll()
+	.subscribe((res)=>{
+	    this.products = res;
+	});
   }
 
 }

@@ -5,15 +5,21 @@
 	    <th>Nombre</th>
 	    <th>Tipo</th>
 	    <th>Proveedor</th>
+	    <th>Price</th>
 	    <th>Actions</th>
 	</tr>
     </thead>
     <tbody>
-	<tr *ngFor='let product of products'>
-	    <td>{{product.Name}}</td>
-	    <td>{{product.Type}}</td>
-	    <td>{{product.Provider}}</td>
-	    </tr>
+	<tr *ngFor="let product of products">
+	    <td>{{product.name}}</td>
+	    <td>{{product.type}}</td>
+	    <td>{{product.provider}}</td>
+	    <td>{{product.price}}</td>
+	    <td class="btn-group">
+		<button class="btn btn-danger">Delete</button>
+		<button class="btn btn-primary">Update</button>
+	    </td>
+	</tr>
     </tbody>
 </table>
 

@@ -11,53 +11,21 @@ export class ProductsService {
 
     getAll()
     {
-	return this.http.get(environment.endPoins+"products")
-	    .subscribe({
-		next(res){
-		    return res;
-		},
-		error(res){
-		    alert("error, view console to details");
-		    console.log(res);
-		}
-	    })
+	return this.http.get(environment.endPoins+"products");
     }
 
     add(product:object)
     {
-	this.http.post(environment.endPoins+"products", product)
-	    .subscribe({
-		next(){ alert("saved ssuccerfull");},
-		error(err){
-		    alert("error, view console to details");
-		    console.log(err);
-		}
-	    });
+	this.http.post(environment.endPoins+"products", product);
     }
 
     update(product:object)
     {
-	this.http.put(environment.endPoins+"products", product)
-	    .subscribe({
-		next(){ alert("saved ssuccerfull");},
-		error(err){
-		    alert("error, view console to details");
-		    console.log(err);
-		}
-	    });
+	this.http.put(environment.endPoins+"products", product);
     }
 
     delete(id:number)
     {
-	this.http.get(environment.endPoins+`products?id=${id}`)
-	    .subscribe({
-		next(res){
-		    return res;
-		},
-		error(res){
-		    alert("error, view console to details");
-		    console.log(res);
-		}
-	    })
+	this.http.get(environment.endPoins+`products?id=${id}`);
     }
 }

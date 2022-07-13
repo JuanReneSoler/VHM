@@ -71,7 +71,8 @@
               "browserTarget": "VHM.Web:build:production"
             },
             "development": {
-              "browserTarget": "VHM.Web:build:development"
+              "browserTarget": "VHM.Web:build:development",
+	      "proxyConfig":"./proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
