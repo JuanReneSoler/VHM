@@ -69,24 +69,24 @@ public class AuthenticateController : ControllerBase
     }
 
 #region probar este metodo
-    //[HttpPost]
-    //[Route("register")]
-    //public async Task<IActionResult> Register(RegisterModel model)
-    //{
-    //    var userExists = await _userManager.FindByNameAsync(model.UserName);
-    //    if (userExists != null)
-    //        return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "El usuario ya existe." });
+    [HttpPost]
+    [Route("register")]
+    public async Task<IActionResult> Register(RegisterModel model)
+    {
+        var userExists = await _userManager.FindByNameAsync(model.UserName);
+        if (userExists != null)
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "El usuario ya existe." });
 
-    //    var user =  new RegisterModel()
-    //    {
-    //    };
-    //    
-    //    var result = await _userManager.CreateAsync(user, $"Pde@{model.Cedula}");
-    //    if (!result.Succeeded)
-    //        return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+        var user =  new RegisterModel()
+        {
+        };
+        
+        var result = await _userManager.CreateAsync(user, $"Pde@{model.Cedula}");
+        if (!result.Succeeded)
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
 
-    //    return Ok(new Response { Status = "Success", Message = "Usuario creado correctamente." });
-    //}
+        return Ok(new Response { Status = "Success", Message = "Usuario creado correctamente." });
+    }
 #endregion
 
     private JwtSecurityToken GetToken(List<Claim> authClaims)

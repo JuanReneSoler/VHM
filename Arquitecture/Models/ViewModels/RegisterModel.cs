@@ -10,5 +10,6 @@ namespace Models.ViewModels
         public string DocId { get; set; }
         public string FullName { get; set; }
 	public string UserName { get; set; }
+	public string password { get; set; }
     }
 }
