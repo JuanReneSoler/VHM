@@ -75,17 +75,17 @@ public class AuthenticateController : ControllerBase
     {
         var userExists = await _userManager.FindByNameAsync(model.UserName);
         if (userExists != null)
-            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "El usuario ya existe." });
+           return BadRequest("El usuario ya existe!"); 
 
-        var user =  new RegisterModel()
+        var user =  new IdentityUser()
         {
         };
         
-        var result = await _userManager.CreateAsync(user, $"Pde@{model.Cedula}");
+        var result = await _userManager.CreateAsync(user, $"Pde@{model.UserName}");
         if (!result.Succeeded)
-            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+           return BadRequest("la creacion del usuario ha fallado!"); 
 
-        return Ok(new Response { Status = "Success", Message = "Usuario creado correctamente." });
+        return Ok("Usuario creado correctamente");
     }
 #endregion
 

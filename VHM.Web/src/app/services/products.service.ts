@@ -16,16 +16,16 @@ export class ProductsService {
 
     add(product:object)
     {
-	this.http.post(environment.endPoins+"products", product);
+	return this.http.post(environment.endPoins+"products", product);
     }
 
     update(product:object)
     {
-	this.http.put(environment.endPoins+"products", product);
+	return this.http.put(environment.endPoins+"products", product);
     }
 
     delete(id:number)
     {
-	this.http.delete(environment.endPoins+"products", { params: {"id": id}});
+	return this.http.delete(environment.endPoins+"products", { params: {"id": id}});
     }
 }

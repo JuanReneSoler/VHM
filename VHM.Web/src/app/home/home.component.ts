@@ -19,8 +19,9 @@ export class HomeComponent implements OnInit {
 	});
     }
 
-    delete(id:any){
-	this.prodService.delete(id);
+    remove(id:any):void{
+	this.prodService.delete(id)
+	.subscribe((res)=>console.log(res));
     }
 
 }
