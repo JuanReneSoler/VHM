@@ -26,6 +26,6 @@ export class ProductsService {
 
     delete(id:number)
     {
-	this.http.get(environment.endPoins+`products?id=${id}`);
+	this.http.delete(environment.endPoins+"products", { params: {"id": id}});
     }
 }

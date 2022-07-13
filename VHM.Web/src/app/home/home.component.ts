@@ -17,6 +17,10 @@ export class HomeComponent implements OnInit {
 	.subscribe((res)=>{
 	    this.products = res;
 	});
-  }
+    }
+
+    delete(id:any){
+	this.prodService.delete(id);
+    }
 
 }
