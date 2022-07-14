@@ -60,12 +60,14 @@ public class AuthenticateController : ControllerBase
                 };
 
             var token = GetToken(authClaims);
-            return Ok(new TokenModel
+            var _token = new JwtSecurityTokenHandler().WriteToken(token);
+	    var obj = new TokenModel
             {
-                token = new JwtSecurityTokenHandler().WriteToken(token),
+                token = _token,
                 user = str,
                 expiration = token.ValidTo
-            });
+            };
+            return Ok(JsonConvert.SerializeObject(obj));
         }
         return Unauthorized();
     }

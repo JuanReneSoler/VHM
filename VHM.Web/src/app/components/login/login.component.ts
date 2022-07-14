@@ -14,8 +14,10 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
-    logIn(model:User){
-	this.auth.login(model)
-    }
+    //logIn(model:User){
+    //    this.auth.login(model)
+    //}
+
+    login(){this.auth.login({"UserName": "juansoler", "Password": "Ju@ns0ler1993"})}
 
 }

@@ -11,11 +11,12 @@ export class AuthService {
 
     constructor(private http: HttpClient, private cookie:CookieService) { }
 
-    login(user:User)
+    login(user:any)
     {
-	this.http.post(environment.endPoins+"authenticate", user)
+	this.http.post(environment.endPoins+"authenticate/login", user)
 	    .subscribe((res)=>{
-		this.cookie.set(environment.cookieName, JSON.stringify(res));
+		console.log(res);
+		//this.cookie.set(environment.cookieName, JSON.stringify(res));
 	    });
     }
 
