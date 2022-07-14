@@ -1,4 +1,7 @@
 export class User {
-    user!:string;
-    password!:string
+    constructor(
+	public UserName:string,
+	public Password:string
+    ){}
+    
 }

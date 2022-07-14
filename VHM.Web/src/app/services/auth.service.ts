@@ -15,14 +15,18 @@ export class AuthService {
     {
 	this.http.post(environment.endPoins+"authenticate/login", user)
 	    .subscribe((res)=>{
-		console.log(res);
-		//this.cookie.set(environment.cookieName, JSON.stringify(res));
+		this.cookie.set(environment.cookieName, JSON.stringify(res));
 	    });
     }
 
     logout()
     {
 	this.cookie.delete(environment.cookieName);
+    }
+
+    isLogged()
+    {
+	return this.cookie.check(environment.cookieName);
     }
 
     getHeader(){
