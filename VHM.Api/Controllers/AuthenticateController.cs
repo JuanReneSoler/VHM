@@ -12,6 +12,9 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Models.ViewModels;
+using Models.Entities;
+using Repositories;
+using Core.Data.Repository;
 
 namespace PDE.Api.Controllers;
 
@@ -24,26 +27,30 @@ public class AuthenticateController : ControllerBase
     private readonly UserManager<IdentityUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
+    private readonly IGenericRepository<Empleado> _repo;
+    private readonly IUnityOfWorkContext _uow;
 
     public AuthenticateController(
         UserManager<IdentityUser> userManager,
         RoleManager<IdentityRole> roleManager,
+	IUnityOfWorkContext uow,
         IConfiguration configuration)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _configuration = configuration;
+	_repo = uow.GetRepository<Empleado>();
+	_uow = uow;
     }
 
-    [AllowAnonymous]
     [HttpPost]
+    [AllowAnonymous]
     [Route("login")]
     public async Task<IActionResult> Login(LoginModel model)
     {
         var user = await _userManager.FindByNameAsync(model.Username);
         if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
         {
-            var userRoles = await _userManager.GetRolesAsync(user);
             var str = JsonConvert.SerializeObject(user);
             var authClaims = new List<Claim>
                 {
@@ -51,11 +58,6 @@ public class AuthenticateController : ControllerBase
                     new Claim(ClaimTypes.UserData, str),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
-
-            foreach (var userRole in userRoles)
-            {
-                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-            }
 
             var token = GetToken(authClaims);
             return Ok(new TokenModel
@@ -68,26 +70,41 @@ public class AuthenticateController : ControllerBase
         return Unauthorized();
     }
 
-#region probar este metodo
     [HttpPost]
+    [AllowAnonymous]
     [Route("register")]
     public async Task<IActionResult> Register(RegisterModel model)
     {
+	try{
         var userExists = await _userManager.FindByNameAsync(model.UserName);
         if (userExists != null)
-           return BadRequest("El usuario ya existe!"); 
+            return BadRequest("El usuario ya existe!");
 
-        var user =  new IdentityUser()
+        var user = new IdentityUser
         {
+            UserName = model.UserName,
         };
-        
-        var result = await _userManager.CreateAsync(user, $"Pde@{model.UserName}");
-        if (!result.Succeeded)
-           return BadRequest("la creacion del usuario ha fallado!"); 
 
+        var entity = new Empleado
+        {
+            Names = model.Names,
+            Surnames = model.Surnames,
+            UserId = user.Id,
+            Birthday = model.Birthday,
+            DocId = model.DocId,
+        };
+
+        var result = await _userManager.CreateAsync(user, model.Password);
+        if (!result.Succeeded)
+            return BadRequest("la creacion del usuario ha fallado!");
+	await _repo.AddAsync(entity);
+	await _uow.CommitAsync();
+	}
+	catch(Exception ex)
+	{
+	}
         return Ok("Usuario creado correctamente");
     }
-#endregion
 
     private JwtSecurityToken GetToken(List<Claim> authClaims)
     {

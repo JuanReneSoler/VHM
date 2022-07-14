@@ -37,7 +37,6 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    [AllowAnonymous]
     public async Task<dynamic> GetAll() =>
            (await _repository.GetAllAsync(x => x.Include(y => y.Proveedor).Include(y => y.Type)))
            .Select(product => new
@@ -48,10 +47,9 @@ public class ProductsController : ControllerBase
                Provider = product.Proveedor.Nombre,
 	       Price = product.PriceUnit,
 	       Description = product.Description
-           }).ToList();
+           });
 
     [HttpPost]
-    [AllowAnonymous]
     public async Task<IActionResult> Add(ProductDto model)
     {
 	var entity = _mapper.Map<Product>(model);
@@ -61,7 +59,6 @@ public class ProductsController : ControllerBase
     }
 
     [HttpDelete]
-    [AllowAnonymous]
     public async Task<IActionResult> Delete(int Id)
     {
         await _repository.DeleteAsync(Id);
@@ -70,12 +67,32 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPut]
-    [AllowAnonymous]
     public async Task<IActionResult> Update(ProductDto model)
     {
 	var entity = _mapper.Map<Product>(model);
         await _repository.UpdateAsync(entity);
-        _uow.CommitAsync();
+        await _uow.CommitAsync();
         return Ok();
     }
+
+    [HttpGet]
+    [Route("providers")]
+    public async Task<dynamic> GetProviders() =>
+	(await _uow.GetRepository<Provider>().GetAllAsync())
+	.Select(provider => new
+		{
+		   provider.Id,
+		   provider.Nombre
+		});
+
+
+    [HttpGet]
+    [Route("types")]
+    public async Task<dynamic> GetTypes() =>
+	(await _uow.GetRepository<ProductsType>().GetAllAsync())
+	.Select(type => new
+		{
+		type.Description,
+		type.Id
+		});
 }
