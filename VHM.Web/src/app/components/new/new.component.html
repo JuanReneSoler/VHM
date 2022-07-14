@@ -1,0 +1,28 @@
+<form #new="ngForm" (ngSubmit)="submit()">
+  <div class="form-group">
+    <label for="Name">Name</label>
+    <input type="text" class="form-control" name="Name" [(ngModel)]="product.Name" placeholder="Name">
+  </div>
+  <div class="form-group">
+    <label for="PriceUnit">Price</label>
+    <input type="text" class="form-control" name="PriceUnit" [(ngModel)]="product.PriceUnit" placeholder="Price">
+  </div>
+  <div class="form-group">
+    <label for="ProveedorId">Providers</label>
+    <select [(ngModel)]="product.ProveedorId" name="ProveedorId">
+	<option *ngFor="let prov of providerArr" value="{{prov.id}}">{{prov.nombre}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="TypeId">Types</label>
+    <select [(ngModel)]="product.TypeId" name="TypeId">
+	<option *ngFor="let type of typesArr" value="{{type.id}}">{{type.description}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="Description">Description</label>
+    <input type="text" class="form-control" name="Description" [(ngModel)]="product.Description" placeholder="Description">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+  <a routerLink="/" class="btn btn-danger">Volver</a>
+</form>

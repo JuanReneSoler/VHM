@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router';
+import {AuthService} from 'src/app/services/auth.service';
 import { ProductsService } from '../../services/products.service';
 
 @Component({
@@ -8,11 +10,14 @@ import { ProductsService } from '../../services/products.service';
 })
 export class HomeComponent implements OnInit {
 
-    constructor(private prodService: ProductsService) { }
+    constructor(private prodService: ProductsService, private auth: AuthService, private router:Router) { }
 
     products:any = [];
 
     ngOnInit(): void {
+
+	if(!this.auth.isLogged()) this.router.navigateByUrl("auth");
+
 	this.prodService.getAll()
 	.subscribe((res)=>{
 	    this.products = res;

@@ -1,0 +1,32 @@
+<form #register="ngForm" (ngSubmit)="submit()">
+  <div class="form-group">
+    <label for="Names">Names</label>
+    <input type="text" class="form-control" name="Names" [(ngModel)]="user.Names" placeholder="Names">
+  </div>
+  <div class="form-group">
+    <label for="Surnames">Surnames</label>
+    <input type="text" class="form-control" name="Surnames" [(ngModel)]="user.Surnames" placeholder="Surnames">
+  </div>
+  <div class="form-group">
+    <label for="Birthday">Birthday</label>
+    <input type="date" class="form-control" name="Birthday" [(ngModel)]="user.Birthday">
+  </div>
+  <div class="form-group">
+    <label for="DocId">DocId</label>
+    <input type="text" class="form-control" name="DocId" [(ngModel)]="user.DocId" placeholder="ID">
+  </div>
+  <div class="form-group">
+    <label for="UserName">User Name</label>
+    <input type="text" class="form-control" name="UserName" [(ngModel)]="user.UserName" placeholder="UserName">
+  </div>
+  <div class="form-group">
+    <label for="Password">Password</label>
+    <input type="password" class="form-control" name="Password" [(ngModel)]="user.Password">
+  </div>
+  <div class="form-group">
+    <label for="Confirm">Confirm Password</label>
+    <input type="password" class="form-control" name="Confirm" [(ngModel)]="user.Confirm">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+  <a routerLink="/" class="btn btn-danger">Volver</a>
+</form>
