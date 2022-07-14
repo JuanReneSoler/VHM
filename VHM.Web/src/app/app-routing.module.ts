@@ -26,6 +26,10 @@ const routes: Routes = [
     {
 	path:"new",
 	component:NewComponent
+    },
+    {
+	path:"new/:id",
+	component:RegisterComponent
     }
 ];
 
